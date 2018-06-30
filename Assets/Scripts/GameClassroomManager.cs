@@ -31,18 +31,20 @@ public class GameClassroomManager : MonoBehaviour {
     //--------------------------------------------------
     // 1.正面(黒板)
     //　　　ロジック:座席表をタップで見ることができる
+    //           追加：針金ゲット
     //--------------------------------------------------
     //座席表
     public GameObject buttonSeatinglist; //座席表：ポップアップ
 	public GameObject buttonSeatinglistOfBoard; //座席表：黒板上に設置
+    public GameObject buttonWireOfBoard;  //針金：黒板上に設置
 
 
-	//--------------------------------------------------
-	// 3.2.右(扉と机)
-	//　　　ロジック:扉開ける処理
-	//--------------------------------------------------
-	//扉開いた時用(ボタンからイメージに切り替え)
-	public GameObject buttonLockDoor; //ロック状態
+    //--------------------------------------------------
+    // 3.2.右(扉と机)
+    //　　　ロジック:扉開ける処理
+    //--------------------------------------------------
+    //扉開いた時用(ボタンからイメージに切り替え)
+    public GameObject buttonLockDoor; //ロック状態
 	public GameObject imageOpenDoor; //オープン状態
 
 	//--------------------------------------------------
@@ -65,13 +67,12 @@ public class GameClassroomManager : MonoBehaviour {
 
 
 	//--------------------------------------------------
-	// 4.チョコ
-	//　　　ロジック:カーテン開いたら鍵でてくる             
+	// 4.弁当
+	//　ロジック:徐行ペンで開けると鍵でてくる
+    //　アイコンから飛んでくる
 	//--------------------------------------------------
-	//チョコ
-	public GameObject buttonChoco; //チョコ
-	public Sprite PictureChocoAndHalfkey; //溶けたチョコの絵 + 鍵付き
-	public Sprite PictureChoco; //溶けたチョコの絵
+	public GameObject buttonBentoItemPanel; //弁当箱
+    public Sprite PictureBentoOpen; //開いた弁当箱の絵
 
 
 
@@ -114,13 +115,26 @@ public class GameClassroomManager : MonoBehaviour {
 	public GameObject buttonBoxOfScribble;
 	//接着剤
 	public GameObject buttonSheelOfBox;
-	//--------------------------------------------------
 
-	//--------------------------------------------------
-	//7:B男机
-	//　　　ロジック:ペンケースが手に入る
-	//--------------------------------------------------
-	public GameObject buttonPencaseOfDesk;
+    public Sprite PicturePencaseCleaned;
+    public Sprite PictureIsSelectedPencaseCleaned;
+    private bool cleanedScribble; //汚れを消したかどうか
+    //--------------------------------------------------
+
+    //--------------------------------------------------
+    //7:机複数
+    //　ロジック:
+    //　　・ペンケースが手に入る
+    //　　・ペンが手に入る
+    //　　・カバンを開閉して弁当箱が手に入る
+    //--------------------------------------------------
+    //ペンケース
+    public GameObject buttonPencaseOfDesk;
+    //ペン
+    public GameObject buttonPenOfDesk;
+    //バッグ
+    public GameObject buttonBagOfDesk;
+    public Sprite PictureBagOpen; //開いたバッグの絵
 
 
     //--------------------------------------------------
@@ -131,14 +145,9 @@ public class GameClassroomManager : MonoBehaviour {
     //--------------------------------------------------
     //--------------------------------------------------
     // UI設定 > ポップアップとアイコン設定まとめ
-    //          (Item:鍵・接着剤・リムーバー)
+    // 
     //--------------------------------------------------
-    public GameObject[] button;
-    public GameObject[] buttonIcon; //鍵：アイコン
-    public Sprite[] Picture; //鍵の絵
-    private bool[] doesHave; //鍵を持っているかどうか
-    private bool[] isSelected; //鍵を選択しているかどうか
-    public Sprite[] PictureIsSelected; //絵（選択状態）
+
 
     //鍵 修復後
     public GameObject buttonKey; //鍵：ポップアップ
@@ -187,9 +196,54 @@ public class GameClassroomManager : MonoBehaviour {
 	private bool doesHavePencase; //ペンケースを持っているかどうか
     private bool isSelectedPencase; //ペンケースを選択しているかどうか
     public Sprite PictureIsSelectedPencase; //絵（選択状態）
-    public Sprite PicturePencaseCleaned;
-    public Sprite PictureIsSelectedPencaseCleaned;
-    private bool cleanedScribble; //汚れを消したかどうか
+
+    //ペン
+    public GameObject buttonPen; //ペン：ポップアップ
+    public GameObject buttonIconPen; //ペン：アイコン
+    public Sprite PicturePen; //ペンの絵
+    private bool doesHavePen; //ペンを持っているかどうか
+    private bool isSelectedPen; //ペンを選択しているかどうか
+    public Sprite PictureIsSelectedPen; //絵（選択状態）
+    public Sprite PictureEmptyPen; //絵：空のペン
+    public Sprite PictureRemoverPen;//絵：除光ペン
+    private bool isRemoverPen; //除光ペンになったかどうか
+
+    //針金
+    public GameObject buttonWire; //針金：ポップアップ
+    public GameObject buttonIconWire; //針金：アイコン
+    public Sprite PictureWire; //針金の絵
+    private bool doesHaveWire; //針金を持っているかどうか
+    private bool isSelectedWire; //針金を選択しているかどうか
+    public Sprite PictureIsSelectedWire; //針金（選択状態）
+
+    //弁当箱
+    public GameObject buttonBento; //弁当箱：ポップアップ
+    public GameObject buttonIconBento; //弁当箱：アイコン
+    public Sprite PictureBento; //弁当箱の絵
+    private bool doesHaveBento; //弁当箱を持っているかどうか
+    private bool isSelectedBento; //弁当箱を選択しているかどうか
+    public Sprite PictureIsSelectedBento; //弁当箱（選択状態）
+
+
+
+
+    /*
+    //アイコン配列
+    public GameObject[] buttonPopIconItem;//アイコンポップアップ
+    public GameObject[] buttonIconItem; //アイコン
+    public Sprite[] PictureIconItem; //アイコンの絵
+    private bool[] doesHaveIconItem; //アイコンを持っているかどうか
+    private bool[] isSelectedIconItem; //アイコンを選択しているかどうか
+    public Sprite[] PictureIsSelectedIconItem; //アイコン（選択状態）
+
+
+    0 本
+    1 弁当
+    2 ペン
+    */
+
+
+
 
     //--------------------------------------------------
     // UI設定 > メッセージ設定
@@ -213,10 +267,10 @@ public class GameClassroomManager : MonoBehaviour {
 	public const int WALL_RIGHT = 2; //右:扉
 	public const int WALL_LEFT = 3; //左:窓
 	//小物ズーム
-	public const int WALL_DESK = 4; //机A
+	public const int WALL_DESK = 4; //弁当箱
 	public const int WALL_LOCKER = 5; //ロッカー
 	public const int WALL_PENCASE = 6; //ペンケース
-	public const int WALL_DESKB = 7; //机B
+	public const int WALL_DESKB = 7; //机ズーム
 
 	public GameObject panelWalls; //方向転換まとめ
 	private int wallNo; //現在の向いている方向
@@ -248,6 +302,9 @@ public class GameClassroomManager : MonoBehaviour {
 		doesHaveSheel = false;
 		doesHaveBottle = false;
 		doesHavePencase = false;
+        doesHaveWire = false;
+        doesHavePen = false;
+
 
         //各アイテムアイコンを選択していない状態に
         isSelectedKey = false;
@@ -256,6 +313,8 @@ public class GameClassroomManager : MonoBehaviour {
         isSelectedSheel = false;
         isSelectedBottle = false;
         isSelectedPencase = false;
+        isSelectedWire = false;
+        isSelectedPen = false;
 
         //カーテン閉じてる状態
         isCurtainOpen = false;
@@ -294,10 +353,31 @@ public class GameClassroomManager : MonoBehaviour {
 		buttonSeatinglist.SetActive (false);
 	}
 
-	//--------------------------------------------------
-	// 各関数 > 2.右(扉と机)
-	//--------------------------------------------------
-	public void PushButtonLockDoor(){
+    //針金をGET
+    public void PushButtonWireOfBoard()
+    {
+        //まだ針金持ってない？
+        if (doesHaveWire == false && isCurtainOpen == true)
+        {
+
+            //針金ポップアップ表示
+            DisplayMessage("針金を手に入れた");
+            buttonWire.SetActive(true);
+
+            //アイコン所持表示&アイテムを所持状態に
+            buttonIconWire.GetComponent<Image>().sprite = PictureWire;
+            doesHaveWire = true; //針金を所持状態に
+
+            //黒板上の針金を非表示に
+            buttonWireOfBoard.SetActive(false);
+
+        }
+    }
+
+    //--------------------------------------------------
+    // 各関数 > 2.右(扉と机)
+    //--------------------------------------------------
+    public void PushButtonLockDoor(){
 		if (isSelectedKey==true) {
 
 			//扉を開けた状態に切り替え
@@ -339,9 +419,10 @@ public class GameClassroomManager : MonoBehaviour {
 	public void PushButtonCurtain(){
 		buttonCurtain.SetActive (false);
 		buttonCurtainOpen.SetActive (true);
-		//チョコを溶かす
-		buttonChoco.GetComponent<Image>().sprite = PictureChocoAndHalfkey;
-		isCurtainOpen = true;
+        //wire
+        buttonWireOfBoard.SetActive(true);
+        isCurtainOpen = true;
+
 	}
 	//リムーバーをGET
 	public void PushButtonBottleOfCurtain(){
@@ -372,25 +453,25 @@ public class GameClassroomManager : MonoBehaviour {
 
 
 	//--------------------------------------------------
-	// 各関数 > 4.チョコ
+	// 各関数 > 4.弁当箱
 	//--------------------------------------------------
-	public void PushButtonChoco(){
+	public void PushButtonBento(){
 		//まだ鍵持ってない？
-		if (doesHaveHalfkeyLeft == false && isCurtainOpen == true) {
+		if (doesHaveHalfkeyLeft == false && isCurtainOpen == true && isSelectedBottle == true) {
 
 			//鍵ポップアップ表示
-			DisplayMessage ("溶けたチョコの中から鍵を手に入れた");
+			DisplayMessage ("弁当箱のから鍵を手に入れた");
 			buttonHalfkeyLeft.SetActive (true);
 
 			//アイコン所持表示&アイテムを所持状態に
 			buttonIconHalfkeyLeft.GetComponent<Image> ().sprite = PictureHalfkeyLeft;
 			doesHaveHalfkeyLeft = true;//鍵を所持状態に
 
-			//チョコの画像から鍵を無くす
-			buttonChoco.GetComponent<Image> ().sprite = PictureChoco;
+			//弁当箱を開けた状態に変える
+			buttonBento.GetComponent<Image> ().sprite = PictureBentoOpen;
 
 		} else {
-			DisplayMessage ("A子がB男にあげたチョコにそっくりだ");
+			DisplayMessage ("接着剤で固く閉じられている");
 		}
 	}
 
@@ -689,6 +770,26 @@ public class GameClassroomManager : MonoBehaviour {
         }
     }
 
+    //針金アイコン操作
+    public void PushButtonIconWire()
+    {
+        if (doesHaveWire == true)
+        {
+            if (isSelectedWire == false)
+            {
+                //選択状態にする
+                isSelectedWire = true;
+                buttonIconWire.GetComponent<Image>().sprite = PictureIsSelectedWire;
+            }
+            else
+            {
+                //選択状態を外す
+                isSelectedWire = false;
+                buttonIconWire.GetComponent<Image>().sprite = PictureWire;
+
+            }
+        }
+    }
 
     //--------------------------------------------------
     // 各関数 > UI設定 > ポップアップ非表示
@@ -719,7 +820,11 @@ public class GameClassroomManager : MonoBehaviour {
 		buttonPencase.SetActive (false);
 		buttonMessage.SetActive (false);
 	}
-
+    public void PushButtonWire()
+    {
+        buttonWire.SetActive(false);
+        buttonMessage.SetActive(false);
+    }
     //--------------------------------------------------
     // 各関数 > UI設定 > メッセージ表示・非表示
     //--------------------------------------------------
@@ -802,8 +907,9 @@ public class GameClassroomManager : MonoBehaviour {
 		buttonSheel.SetActive (false);
 		buttonBottle.SetActive (false);
 		buttonPencase.SetActive (false);
+        buttonWire.SetActive(false);
 
-	}
+    }
 
 	//カメラアングル変更
 	void DisplayWall(){
